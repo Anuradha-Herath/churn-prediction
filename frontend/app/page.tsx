@@ -209,32 +209,6 @@ function riskColor(pct: number) {
   };
 }
 
-/* ── Sidebar nav items ─────────────────────────────────────────────── */
-const NAV = [
-  {
-    label: "Dashboard",
-    active: false,
-    d: "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6",
-  },
-  {
-    label: "Prediction",
-    active: true,
-    d: "M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z",
-  },
-  {
-    label: "Customers",
-    active: false,
-    d: "M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z",
-  },
-  {
-    label: "Settings",
-    active: false,
-    d: "M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z",
-  },
-];
-
-const SPARKLINE = [40, 65, 55, 80, 70, 90, 85, 92];
-
 /* ═══════════════════════════════════════════════════════════════════ */
 /*  MAIN PAGE                                                         */
 /* ═══════════════════════════════════════════════════════════════════ */
@@ -361,117 +335,30 @@ export default function Home() {
   /*  RENDER                                                          */
   /* ═════════════════════════════════════════════════════════════════ */
   return (
-    <div className="flex h-screen overflow-hidden bg-[#F7F6F3]">
-      {/* ── Sidebar ─────────────────────────────────────────────── */}
-      <aside className="hidden md:flex flex-col w-16 lg:w-56 bg-navy-800 text-white shrink-0 transition-all duration-300">
-        {/* Logo */}
-        <div className="flex items-center gap-3 px-4 py-5 border-b border-white/10">
-          <svg
-            width="28"
-            height="28"
-            viewBox="0 0 28 28"
-            fill="none"
-            className="shrink-0"
-          >
-            <rect
-              x="2"
-              y="16"
-              width="5"
-              height="10"
-              rx="1.5"
-              fill="#818CF8"
-            />
-            <rect
-              x="9"
-              y="10"
-              width="5"
-              height="16"
-              rx="1.5"
-              fill="#6366F1"
-            />
-            <rect
-              x="16"
-              y="4"
-              width="5"
-              height="22"
-              rx="1.5"
-              fill="#4F46E5"
-            />
-            <rect
-              x="23"
-              y="8"
-              width="3"
-              height="18"
-              rx="1.5"
-              fill="#818CF8"
-              opacity="0.5"
-            />
-          </svg>
-          <span className="hidden lg:block font-display text-sm font-bold tracking-tight">
-            Churn Analytics
-          </span>
-        </div>
-
-        {/* Nav */}
-        <nav className="flex-1 px-2 py-4 space-y-1">
-          {NAV.map((item) => (
-            <button
-              key={item.label}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-200 ${
-                item.active
-                  ? "bg-white/15 text-white font-medium"
-                  : "text-white/50 hover:text-white/80 hover:bg-white/5"
-              }`}
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="shrink-0"
-              >
-                <path d={item.d} />
-              </svg>
-              <span className="hidden lg:block">{item.label}</span>
-            </button>
-          ))}
-        </nav>
-
-        {/* Footer sparkline accent */}
-        <div className="px-4 py-4 border-t border-white/10">
-          <div className="hidden lg:block">
-            <p className="text-[10px] text-white/40 uppercase tracking-wider mb-2">
-              Model accuracy
-            </p>
-            <div className="flex items-end gap-1 h-8">
-              {SPARKLINE.map((h, i) => (
-                <div
-                  key={i}
-                  className="flex-1 rounded-sm bg-indigo-400/40 transition-all duration-500"
-                  style={{ height: `${h}%` }}
-                />
-              ))}
-            </div>
-            <p className="text-xs text-white/60 font-mono mt-1.5">92.4%</p>
-          </div>
-        </div>
-      </aside>
-
-      {/* ── Main content ────────────────────────────────────────── */}
-      <main className="flex-1 flex flex-col min-h-0 overflow-hidden">
+    <main className="h-screen flex flex-col overflow-hidden bg-[#F7F6F3]">
         {/* Header bar */}
         <header className="shrink-0 flex items-center justify-between px-6 py-4 bg-white border-b border-slate-200/80">
-          <div>
-            <h1 className="font-display text-xl font-bold text-slate-900 tracking-tight">
-              Churn Prediction
-            </h1>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Estimate customer churn risk from profile attributes
-            </p>
+          <div className="flex items-center gap-3">
+            <svg
+              width="28"
+              height="28"
+              viewBox="0 0 28 28"
+              fill="none"
+              className="shrink-0"
+            >
+              <rect x="2" y="16" width="5" height="10" rx="1.5" fill="#818CF8" />
+              <rect x="9" y="10" width="5" height="16" rx="1.5" fill="#6366F1" />
+              <rect x="16" y="4" width="5" height="22" rx="1.5" fill="#4F46E5" />
+              <rect x="23" y="8" width="3" height="18" rx="1.5" fill="#818CF8" opacity="0.5" />
+            </svg>
+            <div>
+              <h1 className="font-display text-xl font-bold text-slate-900 tracking-tight">
+                Churn Prediction
+              </h1>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Estimate customer churn risk from profile attributes
+              </p>
+            </div>
           </div>
 
           {/* Progress indicator */}
@@ -944,7 +831,6 @@ export default function Home() {
             )}
           </section>
         </div>
-      </main>
-    </div>
+    </main>
   );
 }
