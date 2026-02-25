@@ -13,14 +13,17 @@ pip install -r requirements.txt
 ## Run
 
 - **Preprocessing:** `python src/preprocessing.py`
-- **Training:** `python src/train.py` (when added)
-- **API:** `uvicorn api.main:app --reload`
-- **Frontend:** `cd frontend && npm run dev` (when added)
+- **Training:** `python src/train.py`
+- **SHAP explainability:** `python src/evaluate.py` (saves `models/shap_summary.png`, `shap_importance.png`)
+- **API:** `uvicorn api.main:app --reload --host 0.0.0.0 --port 8000`
+- **Frontend:** `cd frontend && npm install && npm run dev` (then open http://localhost:3000)
+- **Docker API:** `docker build -t churn-api .` then `docker run -p 8000:8000 churn-api`
 
 ## Project structure
 
 - `data/` — Telco churn dataset
-- `src/` — preprocessing, training, evaluation, prediction
-- `models/` — saved scaler and model artifacts
-- `api/` — FastAPI app
-- `frontend/` — Next.js app (when added)
+- `src/` — preprocessing, train, evaluate
+- `models/` — scaler, churn_model.joblib, feature_columns.json, SHAP plots
+- `api/` — FastAPI app (`/predict`, `/health`)
+- `frontend/` — Next.js app (form → API → result)
+- `Dockerfile` — container for FastAPI backend

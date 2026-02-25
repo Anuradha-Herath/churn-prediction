@@ -1,0 +1,12 @@
+.venv
+venv
+__pycache__
+*.pyc
+.git
+.gitignore
+mlruns
+frontend
+notebooks
+*.md
+.env
+.env.*
