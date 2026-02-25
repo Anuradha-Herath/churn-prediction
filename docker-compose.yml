@@ -1,0 +1,13 @@
+# Churn Prediction API - Docker Compose
+# Usage: docker compose up -d
+# API: http://localhost:8000
+# Docs: http://localhost:8000/docs
+
+services:
+  churn-api:
+    build: .
+    image: churn-api:latest
+    container_name: churn-api
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
