@@ -1,0 +1,51 @@
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# ML / data (optional: ignore trained models so repo stays small)
+# Uncomment next line if you don't want to commit .joblib files
+# models/*.joblib
+# models/*.png
+
+# MLflow
+mlruns/
+mlartifacts/
+
+# Environment / secrets
+.env
+.env.local
+*.env
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Next.js (when you add frontend)
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+
+# Jupyter
+notebooks/.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Logs
+*.log
