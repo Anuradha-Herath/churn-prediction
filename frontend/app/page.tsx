@@ -213,15 +213,15 @@ function riskColor(pct: number) {
 /*  MAIN PAGE                                                         */
 /* ═══════════════════════════════════════════════════════════════════ */
 export default function Home() {
-  /* ── form state ──────────────────────────────────────────────────── */
-  const [tenure, setTenure] = useState("12");
-  const [monthlyCharges, setMonthlyCharges] = useState("70");
-  const [contract, setContract] = useState("Month-to-month");
-  const [internetService, setInternetService] = useState("Fiber optic");
-  const [paymentMethod, setPaymentMethod] = useState("Electronic check");
-  const [techSupport, setTechSupport] = useState("No");
-  const [onlineSecurity, setOnlineSecurity] = useState("No");
-  const [paperlessBilling, setPaperlessBilling] = useState("Yes");
+  /* ── form state (start empty for clean UX) ──────────────────────── */
+  const [tenure, setTenure] = useState("");
+  const [monthlyCharges, setMonthlyCharges] = useState("");
+  const [contract, setContract] = useState("");
+  const [internetService, setInternetService] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [techSupport, setTechSupport] = useState("");
+  const [onlineSecurity, setOnlineSecurity] = useState("");
+  const [paperlessBilling, setPaperlessBilling] = useState("");
 
   /* ── interaction tracking (progress) ─────────────────────────────── */
   const [touched, setTouched] = useState<Set<string>>(new Set());
@@ -235,6 +235,16 @@ export default function Home() {
     [],
   );
   const progress = Math.round((touched.size / 8) * 100);
+  const isFormComplete =
+    tenure !== "" &&
+    monthlyCharges !== "" &&
+    contract !== "" &&
+    internetService !== "" &&
+    paymentMethod !== "" &&
+    techSupport !== "" &&
+    onlineSecurity !== "" &&
+    paperlessBilling !== "";
+  const hasAnyInput = touched.size > 0;
 
   /* ── prediction state ────────────────────────────────────────────── */
   const [result, setResult] = useState<PredictResponse | null>(null);
@@ -269,7 +279,9 @@ export default function Home() {
 
   const displayPct = result
     ? Math.round(result.churn_probability * 100)
-    : liveRisk.score;
+    : hasAnyInput
+      ? liveRisk.score
+      : 0;
   const rc = riskColor(displayPct);
 
   /* ── submit handler ──────────────────────────────────────────────── */
@@ -407,7 +419,7 @@ export default function Home() {
                         type="range"
                         min={0}
                         max={72}
-                        value={tenure}
+                        value={tenure || "0"}
                         onChange={(e) => {
                           setTenure(e.target.value);
                           touch("tenure");
@@ -420,6 +432,7 @@ export default function Home() {
                           min={0}
                           max={72}
                           value={tenure}
+                          placeholder="0"
                           onChange={(e) => {
                             setTenure(e.target.value);
                             touch("tenure");
@@ -430,7 +443,7 @@ export default function Home() {
                       </div>
                     </div>
                     <p className="text-[10px] text-slate-400 mt-1 font-mono">
-                      {parseInt(tenure) || 0} months
+                      {tenure ? `${parseInt(tenure)} months` : "—"}
                     </p>
                   </div>
 
@@ -450,7 +463,7 @@ export default function Home() {
                         min={0}
                         max={150}
                         step={0.5}
-                        value={monthlyCharges}
+                        value={monthlyCharges || "0"}
                         onChange={(e) => {
                           setMonthlyCharges(e.target.value);
                           touch("monthlyCharges");
@@ -465,6 +478,7 @@ export default function Home() {
                           max={150}
                           step={0.01}
                           value={monthlyCharges}
+                          placeholder="0"
                           onChange={(e) => {
                             setMonthlyCharges(e.target.value);
                             touch("monthlyCharges");
@@ -474,7 +488,7 @@ export default function Home() {
                       </div>
                     </div>
                     <p className="text-[10px] text-slate-400 mt-1 font-mono">
-                      ${parseFloat(monthlyCharges) || 0}/mo
+                      {monthlyCharges ? `$${parseFloat(monthlyCharges)}/mo` : "—"}
                     </p>
                   </div>
 
@@ -494,8 +508,9 @@ export default function Home() {
                         setContract(e.target.value);
                         touch("contract");
                       }}
-                      className={`${inputBase} ${riskCls(isContractRisk)}`}
+                      className={`${inputBase} ${riskCls(isContractRisk)} ${contract === "" ? "text-slate-400" : ""}`}
                     >
+                      <option value="" disabled>Select contract type</option>
                       <option value="Month-to-month">Month-to-month</option>
                       <option value="One year">One year</option>
                       <option value="Two year">Two year</option>
@@ -518,8 +533,9 @@ export default function Home() {
                         setPaymentMethod(e.target.value);
                         touch("paymentMethod");
                       }}
-                      className={`${inputBase} ${riskCls(isPaymentRisk)}`}
+                      className={`${inputBase} ${riskCls(isPaymentRisk)} ${paymentMethod === "" ? "text-slate-400" : ""}`}
                     >
+                      <option value="" disabled>Select payment method</option>
                       <option value="Electronic check">Electronic check</option>
                       <option value="Mailed check">Mailed check</option>
                       <option value="Bank transfer (automatic)">
@@ -547,8 +563,9 @@ export default function Home() {
                         setPaperlessBilling(e.target.value);
                         touch("paperlessBilling");
                       }}
-                      className={inputBase}
+                      className={`${inputBase} ${paperlessBilling === "" ? "text-slate-400" : ""}`}
                     >
+                      <option value="" disabled>Select option</option>
                       <option value="Yes">Yes</option>
                       <option value="No">No</option>
                     </select>
@@ -584,8 +601,9 @@ export default function Home() {
                         setInternetService(e.target.value);
                         touch("internetService");
                       }}
-                      className={`${inputBase} ${riskCls(isInternetRisk)}`}
+                      className={`${inputBase} ${riskCls(isInternetRisk)} ${internetService === "" ? "text-slate-400" : ""}`}
                     >
+                      <option value="" disabled>Select service</option>
                       <option value="DSL">DSL</option>
                       <option value="Fiber optic">Fiber optic</option>
                       <option value="No">No</option>
@@ -608,8 +626,9 @@ export default function Home() {
                         setTechSupport(e.target.value);
                         touch("techSupport");
                       }}
-                      className={`${inputBase} ${riskCls(techSupport === "No")}`}
+                      className={`${inputBase} ${riskCls(techSupport === "No")} ${techSupport === "" ? "text-slate-400" : ""}`}
                     >
+                      <option value="" disabled>Select option</option>
                       <option value="Yes">Yes</option>
                       <option value="No">No</option>
                     </select>
@@ -631,8 +650,9 @@ export default function Home() {
                         setOnlineSecurity(e.target.value);
                         touch("onlineSecurity");
                       }}
-                      className={`${inputBase} ${riskCls(onlineSecurity === "No")}`}
+                      className={`${inputBase} ${riskCls(onlineSecurity === "No")} ${onlineSecurity === "" ? "text-slate-400" : ""}`}
                     >
+                      <option value="" disabled>Select option</option>
                       <option value="Yes">Yes</option>
                       <option value="No">No</option>
                     </select>
@@ -643,8 +663,8 @@ export default function Home() {
               {/* Submit button */}
               <button
                 type="submit"
-                disabled={loading}
-                className="w-full rounded-xl bg-navy-800 text-white py-3 text-sm font-display font-semibold tracking-wide hover:bg-navy-700 disabled:opacity-60 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 transition-all duration-200 flex items-center justify-center gap-2"
+                disabled={loading || !isFormComplete}
+                className="w-full rounded-xl bg-navy-800 text-white py-3 text-sm font-display font-semibold tracking-wide hover:bg-navy-700 disabled:opacity-40 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 transition-all duration-200 flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <>
@@ -678,7 +698,7 @@ export default function Home() {
             <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 flex flex-col items-center">
               <div className="flex items-center justify-between w-full mb-5">
                 <h2 className="font-display text-sm font-semibold text-slate-800">
-                  {result ? "Model Prediction" : "Risk Preview"}
+                  {result ? "Model Prediction" : hasAnyInput ? "Risk Preview" : "Risk Assessment"}
                 </h2>
                 {result && (
                   <button
@@ -690,28 +710,49 @@ export default function Home() {
                 )}
               </div>
 
-              <DonutGauge value={displayPct} color={rc.hex} />
+              {!hasAnyInput && !result ? (
+                <div className="flex flex-col items-center py-6 gap-3">
+                  <div className="w-14 h-14 rounded-full bg-slate-50 flex items-center justify-center">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                  </div>
+                  <p className="text-sm text-slate-500 text-center max-w-[200px]">
+                    Start filling in the form to see a live risk estimate
+                  </p>
+                  <div className="flex gap-1.5 mt-1">
+                    {[...Array(8)].map((_, i) => (
+                      <div key={i} className="w-2 h-2 rounded-full bg-slate-200" />
+                    ))}
+                  </div>
+                  <p className="text-[10px] text-slate-400">8 fields to review</p>
+                </div>
+              ) : (
+                <>
+                  <DonutGauge value={displayPct} color={rc.hex} />
 
-              <div className="mt-4 flex flex-col items-center gap-1.5">
-                <span
-                  className={`inline-flex px-3.5 py-1 rounded-full text-xs font-semibold border ${rc.cls}`}
-                >
-                  {rc.label}
-                </span>
-                {!result && (
-                  <span className="text-[10px] text-slate-400 italic">
-                    Live estimate — submit for model prediction
-                  </span>
-                )}
-                {result && (
-                  <span className="text-[10px] text-slate-400">
-                    Confidence:{" "}
-                    <span className="font-mono font-medium text-slate-600">
-                      {result.confidence}
+                  <div className="mt-4 flex flex-col items-center gap-1.5">
+                    <span
+                      className={`inline-flex px-3.5 py-1 rounded-full text-xs font-semibold border ${rc.cls}`}
+                    >
+                      {rc.label}
                     </span>
-                  </span>
-                )}
-              </div>
+                    {!result && (
+                      <span className="text-[10px] text-slate-400 italic">
+                        Live estimate — submit for model prediction
+                      </span>
+                    )}
+                    {result && (
+                      <span className="text-[10px] text-slate-400">
+                        Confidence:{" "}
+                        <span className="font-mono font-medium text-slate-600">
+                          {result.confidence}
+                        </span>
+                      </span>
+                    )}
+                  </div>
+                </>
+              )}
             </div>
 
             {/* Risk factor breakdown */}
@@ -719,31 +760,49 @@ export default function Home() {
               <h3 className="font-display text-sm font-semibold text-slate-800 mb-4">
                 Risk Factor Breakdown
               </h3>
-              <div className="space-y-3">
-                {liveRisk.factors.slice(0, 8).map((f, i) => (
-                  <div key={i} className="flex items-center gap-3">
-                    <span
-                      className={`w-1.5 h-1.5 rounded-full shrink-0 ${
-                        f.isRisk ? "bg-red-400" : "bg-emerald-400"
-                      }`}
-                    />
-                    <span className="text-xs text-slate-600 w-40 truncate">
-                      {f.label}
-                    </span>
-                    <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                      <div
-                        className={`h-full rounded-full transition-all duration-500 ease-out ${
+              {!hasAnyInput && !result ? (
+                <div className="flex flex-col items-center py-4 gap-2">
+                  <p className="text-xs text-slate-400 text-center">
+                    Risk factors will appear here as you fill in the form
+                  </p>
+                  <div className="w-full space-y-2.5 mt-3 opacity-30">
+                    {[...Array(4)].map((_, i) => (
+                      <div key={i} className="flex items-center gap-3">
+                        <span className="w-1.5 h-1.5 rounded-full bg-slate-300 shrink-0" />
+                        <span className="h-2 bg-slate-200 rounded w-24" />
+                        <div className="flex-1 h-1.5 bg-slate-100 rounded-full" />
+                        <span className="h-2 bg-slate-200 rounded w-6" />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {liveRisk.factors.slice(0, 8).map((f, i) => (
+                    <div key={i} className="flex items-center gap-3">
+                      <span
+                        className={`w-1.5 h-1.5 rounded-full shrink-0 ${
                           f.isRisk ? "bg-red-400" : "bg-emerald-400"
                         }`}
-                        style={{ width: `${Math.round(f.weight * 100)}%` }}
                       />
+                      <span className="text-xs text-slate-600 w-40 truncate">
+                        {f.label}
+                      </span>
+                      <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div
+                          className={`h-full rounded-full transition-all duration-500 ease-out ${
+                            f.isRisk ? "bg-red-400" : "bg-emerald-400"
+                          }`}
+                          style={{ width: `${Math.round(f.weight * 100)}%` }}
+                        />
+                      </div>
+                      <span className="font-mono text-[10px] text-slate-400 w-8 text-right tabular-nums">
+                        {Math.round(f.weight * 100)}%
+                      </span>
                     </div>
-                    <span className="font-mono text-[10px] text-slate-400 w-8 text-right tabular-nums">
-                      {Math.round(f.weight * 100)}%
-                    </span>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* What does this mean? (only after result) */}
