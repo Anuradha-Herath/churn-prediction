@@ -1,3 +1,138 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ── Range slider ─────────────────────────────────────────────────── */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(to right, #E2E8F0, #E2E8F0);
+  outline: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #1E1B4B;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 2px 8px rgba(30, 27, 75, 0.3);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #1E1B4B;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+}
+input[type="range"]:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+}
+
+/* ── Number input: hide browser spinners ──────────────────────────── */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* ── Tooltip ──────────────────────────────────────────────────────── */
+.tooltip-trigger {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+.tooltip-trigger .tooltip-text {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 0;
+  transform: none;
+  background: #1E1B4B;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-family: var(--font-syne), sans-serif;
+  line-height: 1.5;
+  width: max-content;
+  max-width: 240px;
+  z-index: 50;
+  transition: opacity 0.15s ease, visibility 0.15s ease;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(15, 13, 46, 0.25);
+}
+.tooltip-trigger .tooltip-text::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 12px;
+  transform: none;
+  border: 5px solid transparent;
+  border-top-color: #1E1B4B;
+}
+.tooltip-trigger:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* ── Select risk highlight (amber glow) ───────────────────────────── */
+.select-risk-high {
+  border-color: #F59E0B !important;
+  background-color: rgba(245, 158, 11, 0.04) !important;
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.12) !important;
+}
+
+/* ── Loading spinner ──────────────────────────────────────────────── */
+@keyframes spin-smooth {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.spinner {
+  animation: spin-smooth 0.7s linear infinite;
+}
+
+/* ── Expandable panel ─────────────────────────────────────────────── */
+.expandable-content {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.35s ease, opacity 0.25s ease;
+}
+.expandable-content.open {
+  max-height: 400px;
+  opacity: 1;
+}
+
+/* ── Custom scrollbar ─────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
